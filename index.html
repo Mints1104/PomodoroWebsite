@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customizable Pomodoro Timer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <button id="theme-toggle" class="theme-toggle">🌙</button>
+
+    <div class="container">
+      <div class="timer-card">
+        <h1 class="timer-label" id="session-type">Focus Session</h1>
+        <div class="timer-display" id="timer">25:00</div>
+
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress"></div>
+        </div>
+
+        <div class="timer-controls">
+          <button id="start">Start</button>
+          <button id="pause" disabled>Pause</button>
+          <button id="reset" class="secondary">Reset</button>
+        </div>
+
+        <div class="session-count">
+          Completed Sessions: <span id="completed-count">0</span>
+        </div>
+
+        <button id="settings-toggle" class="settings-toggle">
+          Settings ⚙️
+        </button>
+      </div>
+
+      <div class="settings-panel" id="settings-panel" style="display: none">
+        <h2 class="settings-title">Timer Settings</h2>
+
+        <div class="session-controls">
+          <div class="control-group">
+            <label>Focus Duration</label>
+            <div class="time-control">
+              <button class="secondary" id="focus-minus">-</button>
+              <div class="time-display" id="focus-time">25</div>
+              <button class="secondary" id="focus-plus">+</button>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label>Short Break</label>
+            <div class="time-control">
+              <button class="secondary" id="short-break-minus">-</button>
+              <div class="time-display" id="short-break-time">5</div>
+              <button class="secondary" id="short-break-plus">+</button>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label>Long Break</label>
+            <div class="time-control">
+              <button class="secondary" id="long-break-minus">-</button>
+              <div class="time-display" id="long-break-time">15</div>
+              <button class="secondary" id="long-break-plus">+</button>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="settings-title">Color Theme</h3>
+        <div class="color-settings">
+          <div
+            class="color-option selected"
+            style="background-color: #ff6347"
+            data-color="#ff6347"
+            data-secondary="#4682b4"
+          ></div>
+          <div
+            class="color-option"
+            style="background-color: #4caf50"
+            data-color="#4CAF50"
+            data-secondary="#9C27B0"
+          ></div>
+          <div
+            class="color-option"
+            style="background-color: #3498db"
+            data-color="#3498db"
+            data-secondary="#e74c3c"
+          ></div>
+          <div
+            class="color-option"
+            style="background-color: #9b59b6"
+            data-color="#9b59b6"
+            data-secondary="#2ecc71"
+          ></div>
+          <div
+            class="color-option"
+            style="background-color: #f39c12"
+            data-color="#f39c12"
+            data-secondary="#3498db"
+          ></div>
+        </div>
+
+        <div class="audio-settings">
+          <div class="audio-toggle">
+            <span>Sound Alerts</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="sound-toggle" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
