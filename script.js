@@ -66,7 +66,9 @@ let timer = {
 let settings = { ...defaultSettings };
 
 // Audio
-const audioAlert = new Audio("/audio/alarm.mp3");
+const audioAlert = new Audio(
+  "https://mints1104.github.io/PomodoroWebsite/audio/alarm.mp3"
+);
 
 // Load settings from localStorage
 function loadSettings() {
