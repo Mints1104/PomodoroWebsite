@@ -4,6 +4,7 @@ const sessionTypeLabel = document.getElementById("session-type");
 const startButton = document.getElementById("start");
 const pauseButton = document.getElementById("pause");
 const resetButton = document.getElementById("reset");
+const resetSessionsButton = document.getElementById("reset_sessions");
 const progressBar = document.getElementById("progress");
 const completedCountDisplay = document.getElementById("completed-count");
 
@@ -124,6 +125,7 @@ updateTimerDisplay();
 startButton.addEventListener("click", startTimer);
 pauseButton.addEventListener("click", pauseTimer);
 resetButton.addEventListener("click", resetTimer);
+resetSessionsButton.addEventListener("click", resetSessions);
 
 focusPlusButton.addEventListener("click", () => {
   if (settings.focusTime < 60) {
@@ -283,6 +285,28 @@ function pauseTimer() {
     clearInterval(timer.intervalId);
     startButton.disabled = false;
     pauseButton.disabled = true;
+  }
+}
+
+function resetSessions() {
+  const savedSettings = localStorage.getItem("pomodoroSettings");
+
+  if (savedSettings) {
+    let settings = JSON.parse(savedSettings);
+
+    // Reset completed sessions
+    settings.completedSessions = 0;
+
+    // Save back to localStorage
+    localStorage.setItem("pomodoroSettings", JSON.stringify(settings));
+
+    // Reset timer object session count
+    timer.completedSessions = 0;
+
+    // Update UI display
+    completedCountDisplay.textContent = timer.completedSessions;
+
+    console.log("Sessions have been reset.");
   }
 }
 
