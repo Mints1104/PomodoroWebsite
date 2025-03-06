@@ -23,6 +23,7 @@
           <button id="pause" disabled>Pause</button>
           <button id="reset" class="secondary">Reset Timer</button>
           <button id="reset_sessions" class="secondary">Reset Sessions</button>
+          <button id="testAudio" class="secondary">Test Audio</button>
         </div>
 
         <div class="session-count">
@@ -107,6 +108,20 @@
               <input type="checkbox" id="sound-toggle" checked />
               <span class="toggle-slider"></span>
             </label>
+          </div>
+
+          <!-- Volume Slider -->
+          <div class="volume-control">
+            <label for="volume-slider">Volume</label>
+            <input
+              type="range"
+              id="volume-slider"
+              min="0"
+              max="100"
+              step="1"
+              value="50"
+            />
+            <span id="volume-value">50</span>%
           </div>
         </div>
       </div>

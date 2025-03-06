@@ -24,6 +24,19 @@ const soundToggle = document.getElementById("sound-toggle");
 const themeToggle = document.getElementById("theme-toggle");
 const settingsToggle = document.getElementById("settings-toggle");
 const settingsPanel = document.getElementById("settings-panel");
+const testAudioButton = document.getElementById("testAudio");
+
+const volumeSlider = document.getElementById("volume-slider");
+const volumeValue = document.getElementById("volume-value");
+
+volumeSlider.addEventListener("input", () => {
+  volumeValue.textContent = volumeSlider.value;
+  audioAlert.volume = volumeSlider.value / 100;
+});
+
+testAudioButton.addEventListener("click", () => {
+  audioAlert.play();
+});
 
 // Default settings
 const defaultSettings = {
