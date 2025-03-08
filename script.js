@@ -288,6 +288,7 @@ settingsToggle.addEventListener("click", () => {
 function startTimer() {
   if (!timer.isRunning) {
     timer.isRunning = true;
+    // For a resumed session, the following line accounts for paused time:
     timer.startTime =
       Date.now() - (timer.originalTotalSeconds - timer.totalSeconds) * 1000;
     timer.intervalId = setInterval(updateTimer, 1000);
@@ -349,8 +350,7 @@ function resetTimer() {
 
 function updateTimer() {
   const now = Date.now();
-  const elapsed = Math.floor((now - timer.startTime) / 1000); // Total seconds passed
-
+  const elapsed = Math.floor((now - timer.startTime) / 1000); // seconds elapsed
   timer.totalSeconds = timer.originalTotalSeconds - elapsed;
 
   if (timer.totalSeconds > 0) {
@@ -360,16 +360,25 @@ function updateTimer() {
     updateProgressBar();
   } else {
     playAlertSound();
+    pauseTimer(); // Clear the interval before switching
+
     if (timer.mode === "focus") {
       timer.completedSessions++;
       completedCountDisplay.textContent = timer.completedSessions;
       saveSettings();
-      switchMode(
-        timer.completedSessions % 4 === 0 ? "longBreak" : "shortBreak"
-      );
+
+      // After every 4 focus sessions, take a long break
+      if (timer.completedSessions % 4 === 0) {
+        switchMode("longBreak");
+      } else {
+        switchMode("shortBreak");
+      }
     } else {
       switchMode("focus");
     }
+
+    // Auto-start the new session after switching mode:
+    startTimer();
   }
 }
 
@@ -388,24 +397,30 @@ function updateProgressBar() {
 }
 
 function switchMode(mode) {
-  timer.mode = mode;
+  // Stop the current timer if it's running
+  pauseTimer();
 
+  timer.mode = mode;
   if (mode === "focus") {
     sessionTypeLabel.textContent = "Focus Session";
-    timer.minutes = settings.focusTime;
+    timer.originalTotalSeconds = settings.focusTime * 60;
   } else if (mode === "shortBreak") {
     sessionTypeLabel.textContent = "Short Break";
-    timer.minutes = settings.shortBreakTime;
-  } else {
+    timer.originalTotalSeconds = settings.shortBreakTime * 60;
+  } else if (mode === "longBreak") {
     sessionTypeLabel.textContent = "Long Break";
-    timer.minutes = settings.longBreakTime;
+    timer.originalTotalSeconds = settings.longBreakTime * 60;
   }
 
-  timer.seconds = 0;
-  timer.totalSeconds = timer.minutes * 60;
-  timer.originalTotalSeconds = timer.totalSeconds;
+  // Reset timer values for the new session
+  timer.totalSeconds = timer.originalTotalSeconds;
+  timer.minutes = Math.floor(timer.totalSeconds / 60);
+  timer.seconds = timer.totalSeconds % 60;
   updateTimerDisplay();
   resetProgressBar();
+
+  // Reset the start time for the new session
+  timer.startTime = Date.now();
 }
 
 function resetProgressBar() {
