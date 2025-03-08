@@ -288,6 +288,8 @@ settingsToggle.addEventListener("click", () => {
 function startTimer() {
   if (!timer.isRunning) {
     timer.isRunning = true;
+    timer.startTime =
+      Date.now() - (timer.originalTotalSeconds - timer.totalSeconds) * 1000;
     timer.intervalId = setInterval(updateTimer, 1000);
     startButton.disabled = true;
     pauseButton.disabled = false;
@@ -320,6 +322,9 @@ function resetSessions() {
 
     // Update UI display
     completedCountDisplay.textContent = timer.completedSessions;
+    if (mode !== "focus") {
+      switchMode("focus");
+    }
 
     console.log("Sessions have been reset.");
   }
@@ -343,28 +348,25 @@ function resetTimer() {
 }
 
 function updateTimer() {
+  const now = Date.now();
+  const elapsed = Math.floor((now - timer.startTime) / 1000); // Total seconds passed
+
+  timer.totalSeconds = timer.originalTotalSeconds - elapsed;
+
   if (timer.totalSeconds > 0) {
-    timer.totalSeconds--;
     timer.minutes = Math.floor(timer.totalSeconds / 60);
     timer.seconds = timer.totalSeconds % 60;
     updateTimerDisplay();
     updateProgressBar();
   } else {
-    // Timer completed
-    pauseTimer();
     playAlertSound();
-
     if (timer.mode === "focus") {
       timer.completedSessions++;
       completedCountDisplay.textContent = timer.completedSessions;
-      saveSettings(); // Save completed sessions count
-
-      // After every 4 focus sessions, take a long break
-      if (timer.completedSessions % 4 === 0) {
-        switchMode("longBreak");
-      } else {
-        switchMode("shortBreak");
-      }
+      saveSettings();
+      switchMode(
+        timer.completedSessions % 4 === 0 ? "longBreak" : "shortBreak"
+      );
     } else {
       switchMode("focus");
     }
